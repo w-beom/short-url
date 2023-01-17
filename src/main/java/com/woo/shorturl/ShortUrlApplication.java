@@ -1,4 +1,4 @@
-package com.example.shorturl;
+package com.woo.shorturl;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
