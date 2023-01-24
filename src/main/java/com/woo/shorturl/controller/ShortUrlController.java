@@ -1,7 +1,9 @@
 package com.woo.shorturl.controller;
 
 import com.woo.shorturl.dto.ShortUrlRequestDTO;
+import com.woo.shorturl.dto.ShortUrlResponseDTO;
 import com.woo.shorturl.service.ShortUrlService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,12 +22,12 @@ public class ShortUrlController {
         return "index";
     }
 
-    @PostMapping("/short")
-    public void convertUrl(@RequestBody ShortUrlRequestDTO shortUrlRequestDTO) {
-        shortUrlService.convertUrl(shortUrlRequestDTO);
+    @PostMapping("/short-url")
+    public ResponseEntity<ShortUrlResponseDTO> convertUrl(@RequestBody ShortUrlRequestDTO shortUrlRequestDTO) {
+        return ResponseEntity.ok(shortUrlService.convertUrl(shortUrlRequestDTO));
     }
 
-    @GetMapping
+    @GetMapping("/original-url")
     public void getUrl() {
     }
 }

@@ -1,7 +1,7 @@
 package com.woo.shorturl.domain;
 
 import com.woo.shorturl.exception.URLSyntaxException;
-import org.springframework.util.ObjectUtils;
+import com.woo.shorturl.util.Base62;
 import org.springframework.util.StringUtils;
 
 import java.net.MalformedURLException;
@@ -25,19 +25,20 @@ public class ShortUrl {
         }
     }
 
+    public boolean existShortUrl() {
+        return StringUtils.hasLength(this.shortUrl);
+    }
+
+    public void convertShortUrl() {
+        String encodeUrl = Base62.encode(this.url);
+        this.shortUrl = encodeUrl;
+    }
+
     public String getUrl() {
         return url;
     }
 
     public String getShortUrl() {
         return shortUrl;
-    }
-
-    public boolean existShortUrl(){
-        return StringUtils.hasLength(this.shortUrl);
-    }
-
-    public void convertUrl() {
-
     }
 }
