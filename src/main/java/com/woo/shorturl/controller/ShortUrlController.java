@@ -2,9 +2,12 @@ package com.woo.shorturl.controller;
 
 import com.woo.shorturl.dto.ShortUrlRequestDTO;
 import com.woo.shorturl.dto.ShortUrlResponseDTO;
+import com.woo.shorturl.exception.URLSyntaxException;
 import com.woo.shorturl.service.ShortUrlService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +18,11 @@ public class ShortUrlController {
 
     public ShortUrlController(ShortUrlService shortUrlService) {
         this.shortUrlService = shortUrlService;
+    }
+
+    @ExceptionHandler({URLSyntaxException.class})
+    public ResponseEntity<Object> handleURLException(Exception e) {
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/index")
