@@ -14,11 +14,19 @@ submitButton.addEventListener('click', () => {
         }
     })
         .then(function (response) {
+            shortUrlText.innerHTML = "";
+
             let shortUrl = response.data.shortUrl;
-            let text = document.createTextNode(shortUrl.shortUrl);
-            shortUrlText.appendChild(text);
+            let aTag = document.createElement('a');
+            aTag.setAttribute("href", 'http://210.179.66.89:9999/origin/' + shortUrl.shortUrl);
+            let text = document.createTextNode('http://210.179.66.89:9999/origin/' + shortUrl.shortUrl);
+            aTag.appendChild(text);
+            shortUrlText.appendChild(aTag);
         })
         .catch(function (error) {
-            alert(error.message);
+            console.log(error);
+            if (error.response.status === 400) {
+                alert('유효하지 않은 URL입니다.');
+            }
         });
 });
