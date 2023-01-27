@@ -4,6 +4,7 @@ import com.woo.shorturl.dto.ShortUrlRequestDTO;
 import com.woo.shorturl.dto.ShortUrlResponseDTO;
 import com.woo.shorturl.exception.URLSyntaxException;
 import com.woo.shorturl.service.ShortUrlService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +38,10 @@ public class ShortUrlController {
     }
 
     @PostMapping("/short-url")
-    public ResponseEntity<ShortUrlResponseDTO> convertUrl(@RequestBody ShortUrlRequestDTO shortUrlRequestDTO) {
-        return ResponseEntity.ok(shortUrlService.convertUrl(shortUrlRequestDTO));
+    public ResponseEntity<ShortUrlResponseDTO> convertUrl(@RequestBody ShortUrlRequestDTO shortUrlRequestDTO, HttpServletRequest request) {
+        String shortUrl = shortUrlService.convertUrl(shortUrlRequestDTO);
+        String fullUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/origin/" + shortUrl;
+        return ResponseEntity.ok(new ShortUrlResponseDTO(fullUrl));
     }
 
     @GetMapping("/origin/{id}")
@@ -47,7 +50,6 @@ public class ShortUrlController {
         URI uri = new URI(originalUrl);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(uri);
-        System.out.println("originalUrl : " + originalUrl);
         return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
     }
 }

@@ -18,8 +18,8 @@ submitButton.addEventListener('click', () => {
 
             let shortUrl = response.data.shortUrl;
             let aTag = document.createElement('a');
-            aTag.setAttribute("href", 'http://210.179.66.89:9999/origin/' + shortUrl.shortUrl);
-            let text = document.createTextNode('http://210.179.66.89:9999/origin/' + shortUrl.shortUrl);
+            aTag.setAttribute("href", shortUrl);
+            let text = document.createTextNode(shortUrl);
             aTag.appendChild(text);
             shortUrlText.appendChild(aTag);
         })

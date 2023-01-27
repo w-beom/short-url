@@ -1,16 +1,14 @@
 package com.woo.shorturl.dto;
 
-import com.woo.shorturl.domain.ShortUrl;
-
 public class ShortUrlResponseDTO {
 
-    public ShortUrlResponseDTO(ShortUrl shortUrl) {
+    public ShortUrlResponseDTO(String shortUrl) {
         this.shortUrl = shortUrl;
     }
 
-    private ShortUrl shortUrl;
+    private String shortUrl;
 
-    public ShortUrl getShortUrl() {
+    public String getShortUrl() {
         return shortUrl;
     }
 

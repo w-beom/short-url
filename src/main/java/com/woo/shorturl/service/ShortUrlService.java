@@ -16,7 +16,7 @@ public class ShortUrlService {
         this.shortUrlDAO = shortUrlDAO;
     }
 
-    public ShortUrlResponseDTO convertUrl(ShortUrlRequestDTO shortUrlRequestDTO) {
+    public String convertUrl(ShortUrlRequestDTO shortUrlRequestDTO) {
         ShortUrl shortUrl = shortUrlRequestDTO.toShortUrl();
 
         ShortUrl findShortUrl = shortUrlDAO.findById(shortUrl.getId());
@@ -24,10 +24,10 @@ public class ShortUrlService {
         if (ObjectUtils.isEmpty(findShortUrl)) {
             shortUrl.convertShortUrl();
             shortUrlDAO.insert(shortUrl);
-            return new ShortUrlResponseDTO(shortUrl);
+            return shortUrl.getShortUrl();
         }
 
-        return new ShortUrlResponseDTO(findShortUrl);
+        return findShortUrl.getShortUrl();
     }
 
     public String getOriginalUrl(String shortUrl) {
