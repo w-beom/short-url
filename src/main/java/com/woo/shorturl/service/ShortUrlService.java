@@ -4,7 +4,9 @@ import com.woo.shorturl.dao.ShortUrlDAO;
 import com.woo.shorturl.domain.ShortUrl;
 import com.woo.shorturl.dto.ShortUrlRequestDTO;
 import com.woo.shorturl.dto.ShortUrlResponseDTO;
+import com.woo.shorturl.util.Base62;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 @Service
 public class ShortUrlService {
@@ -17,13 +19,20 @@ public class ShortUrlService {
     public ShortUrlResponseDTO convertUrl(ShortUrlRequestDTO shortUrlRequestDTO) {
         ShortUrl shortUrl = shortUrlRequestDTO.toShortUrl();
 
-        ShortUrl findShortUrl = shortUrlDAO.find(shortUrl);
+        ShortUrl findShortUrl = shortUrlDAO.findById(shortUrl.getId());
 
-        if (findShortUrl.existShortUrl()) {
-            return new ShortUrlResponseDTO(findShortUrl);
+        if (ObjectUtils.isEmpty(findShortUrl)) {
+            shortUrl.convertShortUrl();
+            shortUrlDAO.insert(shortUrl);
+            return new ShortUrlResponseDTO(shortUrl);
         }
 
-        shortUrl.convertShortUrl();
-        return new ShortUrlResponseDTO(shortUrl);
+        return new ShortUrlResponseDTO(findShortUrl);
+    }
+
+    public String getOriginalUrl(String shortUrl) {
+        long id = Base62.decode(shortUrl);
+        ShortUrl originalUrl = shortUrlDAO.findById(id);
+        return originalUrl.getUrl();
     }
 }

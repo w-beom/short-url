@@ -16,10 +16,10 @@ public class ShortUrlListDAO implements ShortUrlDAO {
     }
 
     @Override
-    public ShortUrl find(ShortUrl shortUrl) {
+    public ShortUrl findById(long id) {
         return urls.stream()
-                .filter(url -> url.getUrl().equals(shortUrl.getUrl()))
+                .filter(url -> url.getId() == id)
                 .findFirst()
-                .orElse(shortUrl);
+                .orElse(null);
     }
 }

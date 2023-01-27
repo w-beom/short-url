@@ -4,13 +4,19 @@ import com.woo.shorturl.dto.ShortUrlRequestDTO;
 import com.woo.shorturl.dto.ShortUrlResponseDTO;
 import com.woo.shorturl.exception.URLSyntaxException;
 import com.woo.shorturl.service.ShortUrlService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @Controller
 public class ShortUrlController {
@@ -35,7 +41,13 @@ public class ShortUrlController {
         return ResponseEntity.ok(shortUrlService.convertUrl(shortUrlRequestDTO));
     }
 
-    @GetMapping("/original-url")
-    public void getUrl() {
+    @GetMapping("/origin/{id}")
+    public ResponseEntity<Object> getUrl(@PathVariable String id) throws URISyntaxException {
+        String originalUrl = shortUrlService.getOriginalUrl(id);
+        URI uri = new URI(originalUrl);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(uri);
+        System.out.println("originalUrl : " + originalUrl);
+        return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
     }
 }
