@@ -17,9 +17,11 @@ submitButton.addEventListener('click', () => {
             shortUrlText.innerHTML = "";
 
             let shortUrl = response.data.shortUrl;
+            let fullUrl = window.location.protocol + '//' + window.location.hostname + '/' + shortUrl;
             let aTag = document.createElement('a');
-            aTag.setAttribute("href", shortUrl);
-            let text = document.createTextNode(shortUrl);
+            aTag.setAttribute("href", fullUrl);
+
+            let text = document.createTextNode(fullUrl);
             aTag.appendChild(text);
             shortUrlText.appendChild(aTag);
         })

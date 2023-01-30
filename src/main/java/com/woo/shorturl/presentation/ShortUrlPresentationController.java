@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ShortUrlPresentationController {
-    @GetMapping("/")
+    @GetMapping("/main/home")
     public String index() {
         return "index";
     }
