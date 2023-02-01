@@ -3,8 +3,7 @@ package com.woo.shorturl.service;
 import com.woo.shorturl.dao.ShortUrlDAO;
 import com.woo.shorturl.domain.ShortUrl;
 import com.woo.shorturl.dto.ShortUrlRequestDTO;
-import com.woo.shorturl.dto.ShortUrlResponseDTO;
-import com.woo.shorturl.util.Base62;
+import com.woo.shorturl.util.Base56;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -31,7 +30,7 @@ public class ShortUrlService {
     }
 
     public String getOriginalUrl(String shortUrl) {
-        long id = Base62.decode(shortUrl);
+        long id = Base56.decode(shortUrl);
         ShortUrl originalUrl = shortUrlDAO.findById(id);
         return originalUrl.getUrl();
     }
