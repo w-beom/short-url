@@ -1,14 +1,14 @@
 package com.woo.shorturl.util;
 
-public class Base62 {
-    private static final char[] BASE62 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
+public class Base56 {
+    private static final char[] BASE62 = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789".toCharArray();
 
     public static String encode(long value) {
         final StringBuilder sb = new StringBuilder();
         do {
-            int i = (int)(value % 62);
+            int i = (int)(value % 56);
             sb.append(BASE62[i]);
-            value /= 62;
+            value /= 56;
         } while (value > 0);
         return sb.toString();
     }
@@ -19,7 +19,7 @@ public class Base62 {
         for (int i = 0; i < value.length(); i++) {
             int digit = new String(BASE62).indexOf(value.charAt(i));
             result += digit * power;
-            power *= 62;
+            power *= 56;
         }
         return result;
     }
