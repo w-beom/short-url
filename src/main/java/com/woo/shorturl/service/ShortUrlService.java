@@ -1,5 +1,6 @@
 package com.woo.shorturl.service;
 
+import com.woo.shorturl.domain.LackOfShortenUrlKeyException;
 import com.woo.shorturl.repository.ShortUrlRepository;
 import com.woo.shorturl.domain.KeyGenerator;
 import com.woo.shorturl.domain.ShortUrl;
@@ -39,11 +40,12 @@ public class ShortUrlService {
                 return shortenUrlKey;
             }
         }
-        return "";
+        throw new LackOfShortenUrlKeyException();
     }
 
     public String findOriginalUrl(String shortUrl) {
         ShortUrl findShortenUrl = shortUrlRepository.findById(shortUrl);
+        findShortenUrl.increaseCatchCount();
         return findShortenUrl.getUrl();
     }
 }
