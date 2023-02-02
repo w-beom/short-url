@@ -1,4 +1,4 @@
-package com.woo.shorturl.dao;
+package com.woo.shorturl.repository;
 
 import com.woo.shorturl.domain.ShortUrl;
 import org.springframework.stereotype.Component;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class ShortUrlListDAO implements ShortUrlDAO {
+public class ShortUrlListRepository implements ShortUrlRepository {
     private List<ShortUrl> urls = new ArrayList<>();
 
     @Override
@@ -16,9 +16,9 @@ public class ShortUrlListDAO implements ShortUrlDAO {
     }
 
     @Override
-    public ShortUrl findById(long id) {
+    public ShortUrl findById(String id) {
         return urls.stream()
-                .filter(url -> url.getId() == id)
+                .filter(url -> url.getShortUrl().equals(id))
                 .findFirst()
                 .orElse(null);
     }

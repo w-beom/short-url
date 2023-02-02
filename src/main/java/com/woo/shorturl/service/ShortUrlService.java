@@ -1,37 +1,49 @@
 package com.woo.shorturl.service;
 
-import com.woo.shorturl.dao.ShortUrlDAO;
+import com.woo.shorturl.repository.ShortUrlRepository;
+import com.woo.shorturl.domain.KeyGenerator;
 import com.woo.shorturl.domain.ShortUrl;
-import com.woo.shorturl.dto.ShortUrlRequestDTO;
-import com.woo.shorturl.util.Base56;
+import com.woo.shorturl.presentation.ShortUrlRequestDTO;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 @Service
 public class ShortUrlService {
-    private final ShortUrlDAO shortUrlDAO;
+    private final KeyGenerator keyGenerator;
+    private final ShortUrlRepository shortUrlRepository;
 
-    public ShortUrlService(ShortUrlDAO shortUrlDAO) {
-        this.shortUrlDAO = shortUrlDAO;
+    public ShortUrlService(KeyGenerator keyGenerator, ShortUrlRepository shortUrlRepository) {
+        this.keyGenerator = keyGenerator;
+        this.shortUrlRepository = shortUrlRepository;
     }
 
     public String convertUrl(ShortUrlRequestDTO shortUrlRequestDTO) {
-        ShortUrl shortUrl = shortUrlRequestDTO.toShortUrl();
+        String url = shortUrlRequestDTO.getUrl();
+        String shortUrl = createUniqueKey();
 
-        ShortUrl findShortUrl = shortUrlDAO.findById(shortUrl.getId());
+        ShortUrl shortenUrl = new ShortUrl(url, shortUrl);
+        shortUrlRepository.insert(shortenUrl);
+        shortenUrl.increaseCatchCount();
 
-        if (ObjectUtils.isEmpty(findShortUrl)) {
-            shortUrl.convertShortUrl();
-            shortUrlDAO.insert(shortUrl);
-            return shortUrl.getShortUrl();
-        }
-
-        return findShortUrl.getShortUrl();
+        return shortenUrl.getShortUrl();
     }
 
-    public String getOriginalUrl(String shortUrl) {
-        long id = Base56.decode(shortUrl);
-        ShortUrl originalUrl = shortUrlDAO.findById(id);
-        return originalUrl.getUrl();
+    private String createUniqueKey() {
+        final int MAX_RETRY_COUNT = 5;
+        int count = 0;
+
+        while (count++ < MAX_RETRY_COUNT) {
+            String shortenUrlKey = keyGenerator.create();
+            ShortUrl shortenUrl = shortUrlRepository.findById(shortenUrlKey);
+
+            if (null == shortenUrl) {
+                return shortenUrlKey;
+            }
+        }
+        return "";
+    }
+
+    public String findOriginalUrl(String shortUrl) {
+        ShortUrl findShortenUrl = shortUrlRepository.findById(shortUrl);
+        return findShortenUrl.getUrl();
     }
 }

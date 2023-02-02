@@ -1,4 +1,4 @@
-package com.woo.shorturl.dto;
+package com.woo.shorturl.presentation;
 
 public class ShortUrlResponseDTO {
 
