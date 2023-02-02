@@ -17,7 +17,7 @@ submitButton.addEventListener('click', () => {
             shortUrlText.innerHTML = "";
 
             let shortUrl = response.data.shortUrl;
-            let fullUrl = window.location.protocol + '//' + window.location.hostname + '/' + shortUrl;
+            let fullUrl = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/' + shortUrl;
             let aTag = document.createElement('a');
             aTag.setAttribute("href", fullUrl);
 
