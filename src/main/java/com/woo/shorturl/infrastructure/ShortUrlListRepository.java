@@ -1,6 +1,7 @@
-package com.woo.shorturl.repository;
+package com.woo.shorturl.infrastructure;
 
 import com.woo.shorturl.domain.ShortUrl;
+import com.woo.shorturl.repository.ShortUrlRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

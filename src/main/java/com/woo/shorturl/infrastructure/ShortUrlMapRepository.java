@@ -1,6 +1,7 @@
-package com.woo.shorturl.repository;
+package com.woo.shorturl.infrastructure;
 
 import com.woo.shorturl.domain.ShortUrl;
+import com.woo.shorturl.repository.ShortUrlRepository;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
